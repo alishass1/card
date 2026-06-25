@@ -68,16 +68,13 @@ public class CardDeliveryTest {
     }
 
     @Test
-    void shouldSelectCityFromDropdown() {
-        String city = "Казань";
+    void shouldShowErrorForInvalidCity() {
+        String city = "НесуществующийГород";
         String name = generateName();
         String phone = generatePhone();
-        String date = generateDate(7);
+        String date = generateDate(3);
 
-        $("[data-test-id='city'] input").setValue("Ка");
-        $(".menu-item__control").shouldBe(Condition.visible);
-        $$(".menu-item__control").findBy(Condition.text(city)).click();
-
+        $("[data-test-id='city'] input").setValue(city);
         clearDateField();
         $("[data-test-id='date'] input").setValue(date);
         $("[data-test-id='name'] input").setValue(name);
@@ -85,67 +82,82 @@ public class CardDeliveryTest {
         $("[data-test-id='agreement']").click();
         $(".button").click();
 
-        $(".notification__content")
-                .shouldHave(Condition.text("Успешно!"), Condition.visible);
+        $("[data-test-id='city'] .input__sub")
+                .shouldHave(Condition.text("Доставка в выбранный город недоступна"));
     }
 
     @Test
-    void shouldSelectDateFromCalendar() {
+    void shouldShowErrorForPastDate() {
         String city = "Москва";
         String name = generateName();
         String phone = generatePhone();
-
-        LocalDate targetDate = LocalDate.now().plusDays(7);
-        String day = String.valueOf(targetDate.getDayOfMonth());
-        String monthYear = targetDate.format(DateTimeFormatter.ofPattern("MMMM yyyy"));
+        String date = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         $("[data-test-id='city'] input").setValue(city);
-
-        $("[data-test-id='date'] input").click();
-
-        while (!$(".calendar__month").getText().equals(monthYear)) {
-            $("[data-step='1']").click();
-        }
-
-        $$(".calendar__day").findBy(Condition.text(day)).click();
-
+        clearDateField();
+        $("[data-test-id='date'] input").setValue(date);
         $("[data-test-id='name'] input").setValue(name);
         $("[data-test-id='phone'] input").setValue(phone);
         $("[data-test-id='agreement']").click();
         $(".button").click();
 
-        $(".notification__content")
-                .shouldHave(Condition.text("Успешно!"), Condition.visible);
+        $("[data-test-id='date'] .input__sub")
+                .shouldHave(Condition.text("Заказ на выбранную дату невозможен"));
     }
 
     @Test
-    void shouldSelectCityAndDateFromDropdownAndCalendar() {
-        String city = "Екатеринбург";
-        String name = generateName();
+    void shouldShowErrorForNameWithNumbers() {
+        String city = "Москва";
+        String name = "Иван123 Петров";
         String phone = generatePhone();
+        String date = generateDate(3);
 
-        LocalDate targetDate = LocalDate.now().plusDays(14);
-        String day = String.valueOf(targetDate.getDayOfMonth());
-        String monthYear = targetDate.format(DateTimeFormatter.ofPattern("MMMM yyyy"));
-
-        $("[data-test-id='city'] input").setValue("Ек");
-        $(".menu-item__control").shouldBe(Condition.visible);
-        $$(".menu-item__control").findBy(Condition.text(city)).click();
-
-        $("[data-test-id='date'] input").click();
-
-        while (!$(".calendar__month").getText().equals(monthYear)) {
-            $("[data-step='1']").click();
-        }
-
-        $$(".calendar__day").findBy(Condition.text(day)).click();
-
+        $("[data-test-id='city'] input").setValue(city);
+        clearDateField();
+        $("[data-test-id='date'] input").setValue(date);
         $("[data-test-id='name'] input").setValue(name);
         $("[data-test-id='phone'] input").setValue(phone);
         $("[data-test-id='agreement']").click();
         $(".button").click();
 
-        $(".notification__content")
-                .shouldHave(Condition.text("Успешно!"), Condition.visible);
+        $("[data-test-id='name'] .input__sub")
+                .shouldHave(Condition.text("Имя и Фамилия указаны неверно"));
+    }
+
+    @Test
+    void shouldShowErrorForInvalidPhone() {
+        String city = "Москва";
+        String name = generateName();
+        String phone = "1234567890";
+        String date = generateDate(3);
+
+        $("[data-test-id='city'] input").setValue(city);
+        clearDateField();
+        $("[data-test-id='date'] input").setValue(date);
+        $("[data-test-id='name'] input").setValue(name);
+        $("[data-test-id='phone'] input").setValue(phone);
+        $("[data-test-id='agreement']").click();
+        $(".button").click();
+
+        $("[data-test-id='phone'] .input__sub")
+                .shouldHave(Condition.text("Мобильный телефон указан неверно"));
+    }
+
+    @Test
+    void shouldShowErrorWhenAgreementNotChecked() {
+        String city = "Москва";
+        String name = generateName();
+        String phone = generatePhone();
+        String date = generateDate(3);
+
+        $("[data-test-id='city'] input").setValue(city);
+        clearDateField();
+        $("[data-test-id='date'] input").setValue(date);
+        $("[data-test-id='name'] input").setValue(name);
+        $("[data-test-id='phone'] input").setValue(phone);
+        $(".button").click();
+
+        $("[data-test-id='agreement'].input_invalid")
+                .shouldBe(Condition.visible);
     }
 }

@@ -1,10 +1,10 @@
 # Автотесты для сервиса карт доставки
 
-[![Java CI with Gradle](https://github.com/YOUR_USERNAME/card-delivery-tests/actions/workflows/gradle.yml/badge.svg)](https://github.com/YOUR_USERNAME/card-delivery-tests/actions/workflows/gradle.yml)
+[![Java CI with Gradle](https://github.com/alishass1/card-delivery-tests/actions/workflows/gradle.yml/badge.svg)](https://github.com/alishass1/card-delivery-tests/actions/workflows/gradle.yml)
 
-## Описание проекта
+## Описание
 
-Проект содержит автотесты для сервиса заказа карт доставки с использованием Selenide.
+Автотесты для сервиса заказа карт доставки с использованием Selenide.
 
 ## Технологии
 
@@ -14,9 +14,11 @@
 - Gradle
 - GitHub Actions
 
-## Запуск тестов
+## Запуск
 
-### 1. Запуск SUT (сервис карт доставки)
+1. Запустить SUT: `java -jar artifacts/app-card-delivery.jar`
+2. Запустить тесты: `./gradlew test --info`
 
-```bash
-java -jar artifacts/app-card-delivery.jar
+## Документация по дефектам
+
+- [Issue #1](ссылка на ваш issue) - Невалидная дата проходит валидацию
