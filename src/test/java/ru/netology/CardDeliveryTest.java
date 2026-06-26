@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -62,7 +63,10 @@ public class CardDeliveryTest {
         $("[data-test-id='agreement']").click();
         $(".button").click();
 
-        $(".notification__content").shouldHave(Condition.text("Встреча успешно забронирована"));
+       
+        $(".notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldHave(Condition.exactText("Встреча успешно забронирована на " + date));
     }
 
     @Test
@@ -80,7 +84,8 @@ public class CardDeliveryTest {
         $("[data-test-id='agreement']").click();
         $(".button").click();
 
-        $("[data-test-id='city'] .input__sub").shouldHave(Condition.text("Доставка в выбранный город недоступна"));
+        $("[data-test-id='city'] .input__sub")
+                .shouldHave(Condition.text("Доставка в выбранный город недоступна"));
     }
 
     @Test
@@ -98,7 +103,8 @@ public class CardDeliveryTest {
         $("[data-test-id='agreement']").click();
         $(".button").click();
 
-        $("[data-test-id='date'] .input__sub").shouldHave(Condition.text("Заказ на выбранную дату невозможен"));
+        $("[data-test-id='date'] .input__sub")
+                .shouldHave(Condition.text("Заказ на выбранную дату невозможен"));
     }
 
     @Test
@@ -116,7 +122,8 @@ public class CardDeliveryTest {
         $("[data-test-id='agreement']").click();
         $(".button").click();
 
-        $("[data-test-id='name'] .input__sub").shouldHave(Condition.text("Имя и Фамилия указаные неверно"));
+        $("[data-test-id='name'] .input__sub")
+                .shouldHave(Condition.text("Имя и Фамилия указаные неверно"));
     }
 
     @Test
@@ -134,7 +141,8 @@ public class CardDeliveryTest {
         $("[data-test-id='agreement']").click();
         $(".button").click();
 
-        $("[data-test-id='phone'] .input__sub").shouldHave(Condition.text("Телефон указан неверно"));
+        $("[data-test-id='phone'] .input__sub")
+                .shouldHave(Condition.text("Телефон указан неверно"));
     }
 
     @Test
@@ -151,7 +159,8 @@ public class CardDeliveryTest {
         $("[data-test-id='phone'] input").setValue(phone);
         $(".button").click();
 
-        $("[data-test-id='agreement'].input_invalid").shouldBe(Condition.visible);
+        $("[data-test-id='agreement'].input_invalid")
+                .shouldBe(Condition.visible);
     }
 
     @Test
@@ -172,6 +181,8 @@ public class CardDeliveryTest {
         $("[data-test-id='agreement']").click();
         $(".button").click();
 
-        $(".notification__content").shouldHave(Condition.text("Встреча успешно забронирована"));
+        $(".notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldHave(Condition.exactText("Встреча успешно забронирована на " + date));
     }
 }
